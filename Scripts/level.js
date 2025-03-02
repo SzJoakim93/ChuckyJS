@@ -1,10 +1,13 @@
 function Level() {
     this.chickens = [];
     this.floors = [];
+    this.floorsRuinable = [];
+    this.floorsPeriodic = [];
     this.climpers = [];
-    this.dynamic_floors = [];
+    this.lifts = [];
 
     this.sands = [];
+    this.fires = [];
 
     this.bigChicken = new BigChicken();
     this.gateState = 0;
@@ -45,12 +48,6 @@ function Level() {
     
     this.trap_graph = new Image();
     this.trap_graph.src = "GFX/Trap.png";
-    this.lift_ver_graph = new Image();
-    this.lift_ver_graph.src = "GFX/LinkVer.png";
-    this.lift_hor_graph = new Image();
-    this.lift_hor_graph.src = "GFX/LinkHor.png";
-    this.lift_graph = new Image();
-    this.lift_graph.src = "GFX/Lift.png";
 
     this.egg_graph = new Image();
     this.egg_graph.src = "GFX/Egg.png";
@@ -69,8 +66,6 @@ function Level() {
     this.life_graph = new Image();
     this.life_graph.src = "GFX/Life.png";
 
-    this.floor_ruined_graph = new Image();
-    this.floor_ruined_graph.src = "GFX/LevelRuined.png";
     this.plant_graph = new MultipleImage("GFX/Plant.png", 2, 1, 25, 22);
     this.fire_graph = new Image();
     this.fire_graph.src = "GFX/Fire.png";
@@ -85,23 +80,8 @@ function Level() {
             this.bigChicken.handleEvents();
         }
 
-        for (var i = 0; i < this.levelData.lifts.length; i++) {
-            if (this.levelData.lifts[i].type === 0) {
-                this.levelData.lifts[i].y += this.levelData.lifts[i].direction;
-                if (this.levelData.lifts[i].size < 480) {
-                    if (this.levelData.lifts[i].y < this.levelData.lifts[i].startCoord.y || this.levelData.lifts[i].y > this.levelData.lifts[i].startCoord.y + this.levelData.lifts[i].size)
-                    this.levelData.lifts[i].direction *= -1;
-                } else {
-                    if (this.levelData.lifts[i].y < 0)
-                        this.levelData.lifts[i].y = 490;
-                    else if (this.levelData.lifts[i].y > 490)
-                        this.levelData.lifts[i].y = 0;
-                }
-            } else {
-                this.levelData.lifts[i].x += this.levelData.lifts[i].direction;
-                if (this.levelData.lifts[i].x < this.levelData.lifts[i].startCoord.x || this.levelData.lifts[i].x > this.levelData.lifts[i].startCoord.x + this.levelData.lifts[i].size - 40)
-                    this.levelData.lifts[i].direction *= -1;
-            }
+        for (var i = 0; i < this.lifts.length; i++) {
+            this.lifts[i].handleEvents();
         }
 
         if (this.levelData.claws.length > 0) {
@@ -119,7 +99,6 @@ function Level() {
                     }
                 }
             }
-            
         }
     }
 
@@ -129,93 +108,39 @@ function Level() {
         }
 
         for (var i = 0; i< this.levelData.traps.length; i++) {
-            ctx.drawImage(this.trap_graph, this.levelData.traps[i].x, this.level.traps[i].y);
+            ctx.drawImage(this.trap_graph, this.levelData.traps[i].x, this.levelData.traps[i].y);
         }
 
-        for (var i = 0; i < this.levelData.floors.length; i++) {
-            this.floor_graph.apply(this.levelData.floors[i].x, this.levelData.floors[i].y, this.levelData.levelStyle.floor * 3);
-
-            for (var j = 12; j < this.levelData.floors[i].size - 12; j += 32) {
-                this.floor_graph.apply(this.levelData.floors[i].x + j, this.levelData.floors[i].y, this.levelData.levelStyle.floor * 3 + 1);
-            }
-
-            this.floor_graph.apply( this.levelData.floors[i].x + this.levelData.floors[i].size - 12, this.levelData.floors[i].y, this.levelData.levelStyle.floor * 3 + 2);
+        for (var i = 0; i < this.floors.length; i++) {
+            this.floors[i].rendering();
         }
 
-        /*for (var i = 0; i < this.dynamic_floors.length; i++) {
-            var coord;
-            x = this.dynamic_floors[i].x;
-            y = this.dynamic_floors[i].y;
-            if (this.dynamic_floors[i].type == 0 && this.dynamic_floors[i].state < 24)
-                SDL_BlitSurface(floor_ruined_graph, ruined_rect[0][this.dynamic_floors[i].state], screen, coord);
-            else if (this.dynamic_floors[i].type == 1)
-            {
-                if (this.dynamic_floors[i].state < 16)
-                    SDL_BlitSurface(floor_graph, dynamic_floor_rect[0][this.dynamic_floors[i].state], screen, coord);
-                else if (this.dynamic_floors[i].state > 23)
-                    SDL_BlitSurface(floor_graph, dynamic_floor_rect[0][39-this.dynamic_floors[i].state], screen, coord);
-            }
+        for (var i = 0; i < this.floorsPeriodic.length; i++) {
+            this.floorsPeriodic[i].rendering();
+        }
 
-            for (var j = 0; j < this.dynamic_floors[i].size-32; j+=32)
-            {
-                if (this.dynamic_floors[i].type == 0 && this.dynamic_floors[i].state < 24)
-                    SDL_BlitSurface(floor_ruined_graph, ruined_rect[1][this.dynamic_floors[i].state], screen, coord);
-                else if (this.dynamic_floors[i].type == 1)
-                {
-                    if (this.dynamic_floors[i].state < 16)
-                        SDL_BlitSurface(floor_graph, dynamic_floor_rect[1][this.dynamic_floors[i].state], screen, coord);
-                    else if (this.dynamic_floors[i].state > 23)
-                        SDL_BlitSurface(floor_graph, dynamic_floor_rect[1][39-this.dynamic_floors[i].state], screen, coord);
-                }
-
-                x += 32;
-            }
-
-            if (this.dynamic_floors[i].type == 0 && this.dynamic_floors[i].state < 24)
-                SDL_BlitSurface(floor_ruined_graph, ruined_rect[2][this.dynamic_floors[i].state], screen, coord);
-            else if (this.dynamic_floors[i].type == 1)
-            {
-                if (this.dynamic_floors[i].state < 16)
-                    SDL_BlitSurface(floor_graph, dynamic_floor_rect[2][this.dynamic_floors[i].state], screen, coord);
-                else if (this.dynamic_floors[i].state > 23)
-                    SDL_BlitSurface(floor_graph, dynamic_floor_rect[2][39-this.dynamic_floors[i].state], screen, coord);
-            }
-        }*/
+        for (var i = 0; i < this.floorsRuinable.length; i++) {
+            this.floorsRuinable[i].rendering();
+        }
 
         for (var i = 0; i < this.levelData.climpers.length; i++) {
             var k = 0;
             for (var j = 0; j < this.levelData.climpers[i].size - 10; j += 12) {
                 this.climp_graph.apply(this.levelData.climpers[i].x, this.levelData.climpers[i].y + j, this.levelData.levelStyle.climpers * 3);
-                /*if (i % 2 === 0) {
-                    this.climp_graph.apply(this.levelData.climpers[i].x, this.levelData.climpers[i].y + k, this.levelData.levelStyle.climpers * 3);
-                    k += 12;
-                } else {
-                    this.climp_graph.apply(this.levelData.climpers[i].x, this.levelData.climpers[i].y + k, this.levelData.levelStyle.climpers * 3 + 1);
-                    k += 13;
-                }*/
             }
             this.climp_graph.apply(this.levelData.climpers[i].x, this.levelData.climpers[i].y + j, this.levelData.levelStyle.climpers * 3 + 2);
         }
 
-        for (var i = 0; i < this.levelData.lifts.length; i++) {
-            if (this.levelData.lifts[i].type === 0) {
-                for (var j = 0; j < this.levelData.lifts[i].size; j += 8) {
-                    ctx.drawImage(this.lift_ver_graph, this.levelData.lifts[i].startCoord.x + 18, this.levelData.lifts[i].startCoord.y + j);
-                }
-            } else {
-                for (var j = 0; j < this.levelData.lifts[i].size; j += 8) {
-                    ctx.drawImage(this.lift_hor_graph, this.levelData.lifts[i].startCoord.x + j, this.levelData.lifts[i].startCoord.y + 2);
-                }
-            }
-            ctx.drawImage(this.lift_graph, this.levelData.lifts[i].x, this.levelData.lifts[i].y);
+        for (var i = 0; i < this.lifts.length; i++) {
+            this.lifts[i].rendering();
         }
 
         for (var i = 0; i < this.levelData.plants.length; i++) {
             this.plant_graph.apply(this.levelData.plants[i].x, this.levelData.plants[i].y, this.levelData.plants[i].isDead ? 1: 0);
         }
 
-        for (var i = 0; i < this.levelData.fires.length; i++) {
-            ctx.drawImage(this.fire_graph, this.levelData.fires[i].x, this.levelData.fires[i].y);
+        for (var i = 0; i < this.fires.length; i++) {
+            this.fires[i].applyAnim();
         }
 
         for (var i = 0; i < this.chickens.length; i++) {
@@ -276,13 +201,28 @@ function Level() {
                 this.levelData.chickens[i].triggers
             );
         }
+        for (var i = 0; i < this.levelData.floors.length; i++) {
+            this.floors[i] = new FloorStatic(this.levelData.floors[i].x, this.levelData.floors[i].y, this.levelData.floors[i].size, this.levelData.levelStyle.floor);
+        }
+
+        for (var i = 0; i < this.levelData.dynamic_floors.length; i++) {
+            if (this.levelData.dynamic_floors[i].type === 0) {
+                this.floorsRuinable.push(new FloorRuinable(this.levelData.dynamic_floors[i].x, this.levelData.dynamic_floors[i].y, this.levelData.dynamic_floors[i].size, this.levelData.levelStyle.floor));
+            } else {
+                this.floorsPeriodic.push(new FloorPeriodic(this.levelData.dynamic_floors[i].x, this.levelData.dynamic_floors[i].y, this.levelData.dynamic_floors[i].size, this.levelData.levelStyle.floor));
+            }
+        }
 
         for (var i = 0; i < this.levelData.sands.length; i++) {
             this.sands[i] = new MultipleAnimator(this.sand_anim, this.levelData.sands[i].x, this.levelData.sands[i].y, 20);
         }
 
+        for (var i = 0; i < this.levelData.fires.length; i++) {
+            this.fires[i] = new Animation(this.fire_graph, this.levelData.fires[i].x, this.levelData.fires[i].y, 22, 15, 6, 1, 22, 15, 20);
+        }
+
         for (var i = 0; i < this.levelData.lifts.length; i++) {
-            this.levelData.lifts[i].startCoord = { x: this.levelData.lifts[i].x, y: this.levelData.lifts[i].y };
+            this.lifts[i] = new Lift(this.levelData.lifts[i].x, this.levelData.lifts[i].y, this.levelData.lifts[i].size, this.levelData.lifts[i].type, this.levelData.lifts[i].direction);
         }
 
         this.remaining = this.levelData.eggs.length;
@@ -303,10 +243,8 @@ function Level() {
             this.levelData.plants[i].isDead = false;
         }
 
-        /*for (var i = 0; i < this.dynamic_floors.length; i++) {
-            if (this.dynamic_floors[i].type == 0) {
-                this.dynamic_floors[i].state = 0;
-            }
-        }*/
+        for (var i = 0; i < this.floorsRuinable.length; i++) {
+            this.floorsRuinable[i].state = 0;
+        }
     }
 }

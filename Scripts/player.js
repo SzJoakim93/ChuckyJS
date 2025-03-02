@@ -14,6 +14,7 @@ function Player() {
     this.points = 0;
     this.lives = 3;
     this.bonus = 1000;
+    this.direction = 0;
 
     this.gravity = false;
     this.jump = -11;
@@ -40,9 +41,7 @@ function Player() {
     this.handleEvents = function() {
         if (!this.dead) {
             if (keystates[KEY_LEFT]) {
-                if (this.x > 0) {
-                    this.x -= 8;
-                }
+                    this.direction = -8;
 
                 if (this.gravity || this.jump > -11) {
                     this.animator.switchAnim(2);
@@ -50,22 +49,29 @@ function Player() {
                     this.animator.switchAnim(3);
                 }
             } else if (keystates[KEY_RIGHT]) {
-                if (this.x < 620) {
-                    this.x += 8;
-                }
+                    this.direction = 8;
                     
                 if (this.gravity || this.jump > -11) {
                     this.animator.switchAnim(0);
                 } else {
                     this.animator.switchAnim(1);
                 }
-            } else {
+            } else if (this.jump === -11) {
+                this.direction = 0;
                 if (this.animator.currAnim === 3) {
                     this.animator.switchAnim(2);
                 } else if (this.animator.currAnim === 1) {
                     this.animator.switchAnim(0);
                 }
             }
+
+            if (this.x > 620) {
+                this.x -= 8;
+            } else if (this.x < 0) {
+                this.x += 8;
+            }
+
+            this.x += this.direction;
 
             if ((keystates[KEY_RSHIFT] || keystates[KEY_LSHIFT]) && this.jump === -11 && !this.gravity) {
                 this.jump = 11;
@@ -84,7 +90,7 @@ function Player() {
 
         if (!this.dead) {
             for (var i = 0; i < inGameScene.level.chickens.length; i++) {
-                if (inGameScene.level.chickens[i].coord.x + 32 > this.x && inGameScene.level.chickens[i].coord.x < this.x + 25 && inGameScene.level.chickens[i].coord.y + 35 > this.y && inGameScene.level.chickens[i].coord.y < this.y + 35) {
+                if (inGameScene.level.chickens[i].coord.x + 30 > this.x && inGameScene.level.chickens[i].coord.x < this.x + 23 && inGameScene.level.chickens[i].coord.y + 32 > this.y && inGameScene.level.chickens[i].coord.y < this.y + 35) {
                     this.setToDead();
                     inGameScene.chicken_kill.play();
                     if (inGameScene.level.chickens[i].dir === 1) {
@@ -95,37 +101,32 @@ function Player() {
                 }
             }
 
-            for (var i = 0; i < inGameScene.level.levelData.floors.length; i++) {
-                if (isCollided(this.x, this.y + 34, 25, 4, inGameScene.level.levelData.floors[i].x, inGameScene.level.levelData.floors[i].y, inGameScene.level.levelData.floors[i].size, 14)) {
+            for (var i = 0; i < inGameScene.level.floors.length; i++) {
+                if (isCollided(this.x, this.y + 34, 25, 4, inGameScene.level.floors[i].x, inGameScene.level.floors[i].y, inGameScene.level.floors[i].size, 14)) {
                     this.gravity = false;
-                    if (this.y + 38 >= inGameScene.level.levelData.floors[i].y && this.animator.currAnim !== 5) {
-                        this.y = inGameScene.level.levelData.floors[i].y - 38;
+                    if (this.y + 38 >= inGameScene.level.floors[i].y && this.animator.currAnim !== 5) {
+                        this.y = inGameScene.level.floors[i].y - 38;
                     }
                 }
             }
 
-            /*for (var i = 0; i<max_inGameScene.level.dynamic_floors; i++) {
-                if ((inGameScene.level.dynamic_floors[i].type == 0 && inGameScene.level.dynamic_floors[i].state < 24 || inGameScene.level.dynamic_floors[i].type == 1 && (inGameScene.level.dynamic_floors[i].state < 16 || inGameScene.level.dynamic_floors[i].state > 22)) && this.x + 25 > inGameScene.level.dynamic_floors[i].x && this.x < inGameScene.level.dynamic_floors[i].x + inGameScene.level.dynamic_floors[i].size && this.y + 37 >= inGameScene.level.dynamic_floors[i].y && this.y + 34 < inGameScene.level.dynamic_floors[i].y + 20) {
+            for (var i = 0; i < inGameScene.level.floorsRuinable.length; i++) {
+                if (inGameScene.level.floorsRuinable[i].isCollided(this)) {
                     this.gravity = false;
-                    if (this.y + 36 >= inGameScene.level.dynamic_floors[i].y) {
-                        this.y = inGameScene.level.dynamic_floors[i].y - 36;
-                    }
-
-                    if (inGameScene.level.dynamic_floors[i].type == 0 && inGameScene.level.dynamic_floors[i].state == 0) {
-                        inGameScene.level.dynamic_floors[i].state = 1;
+                    if (this.y + 38 >= inGameScene.level.floorsRuinable[i].y && this.animator.currAnim !== 5) {
+                        this.y = inGameScene.level.floorsRuinable[i].y - 38;
                     }
                 }
+            }
 
-                if (inGameScene.level.dynamic_floors[i].type == 0 && inGameScene.level.dynamic_floors[i].state > 0 && inGameScene.level.dynamic_floors[i].state < 24) {
-                    inGameScene.level.dynamic_floors[i].state++;
-                } else if (inGameScene.level.dynamic_floors[i].type == 1) {
-                    inGameScene.level.dynamic_floors[i].state++;
-                    if (inGameScene.level.dynamic_floors[i].state > 39) {
-                        inGameScene.level.dynamic_floors[i].state = 0;
+            for (var i = 0; i < inGameScene.level.floorsPeriodic.length; i++) {
+                if (inGameScene.level.floorsPeriodic[i].isCollided(this)) {
+                    this.gravity = false;
+                    if (this.y + 38 >= inGameScene.level.floorsPeriodic[i].y && this.animator.currAnim !== 5) {
+                        this.y = inGameScene.level.floorsPeriodic[i].y - 38;
                     }
                 }
-            }*/
-
+            }
 
             for (var i = 0; i < inGameScene.level.levelData.climpers.length; i++) {
                 if (isCollided(this.x, this.y, 25, 1, inGameScene.level.levelData.climpers[i].x, inGameScene.level.levelData.climpers[i].y, 27, inGameScene.level.levelData.climpers[i].size)) {
@@ -144,16 +145,16 @@ function Player() {
                 }
             }
 
-            for (var i = 0; i < inGameScene.level.levelData.lifts.length; i++) {
-                if (isCollided(this.x, this.y + 34, 25, 4, inGameScene.level.levelData.lifts[i].x, inGameScene.level.levelData.lifts[i].y, 32, 14)) {
+            for (var i = 0; i < inGameScene.level.lifts.length; i++) {
+                if (isCollided(this.x, this.y + 34, 25, 4, inGameScene.level.lifts[i].x, inGameScene.level.lifts[i].y, 32, 14)) {
                     this.gravity = false;
-                    if (this.y + 36 >= inGameScene.level.levelData.lifts[i].y) {
-                        this.y = inGameScene.level.levelData.lifts[i].y - 36;
+                    if (this.y + 36 >= inGameScene.level.lifts[i].y) {
+                        this.y = inGameScene.level.lifts[i].y - 36;
                     }
-                    if (inGameScene.level.levelData.lifts[i].type === 0) {
-                        this.y += inGameScene.level.levelData.lifts[i].direction;
+                    if (inGameScene.level.lifts[i].type === 0) {
+                        this.y += inGameScene.level.lifts[i].direction;
                     } else {
-                        this.x += inGameScene.level.levelData.lifts[i].direction;
+                        this.x += inGameScene.level.lifts[i].direction;
                     }  
                 }
             }
@@ -200,7 +201,7 @@ function Player() {
             }
 
             for (var i = 0; i < inGameScene.level.levelData.plants.length; i++) {
-                if (isCollided(this.x, this.y, 25, 35, inGameScene.level.levelData.plants[i].x, inGameScene.level.levelData.plants[i].y, 25, 22)) {
+                if (isCollided(this.x + 3, this.y + 10, 25, 25, inGameScene.level.levelData.plants[i].x + 2, inGameScene.level.levelData.plants[i].y + 2, 21, 18)) {
                     this.setToDead();
                     this.visible = false;
                     this.initDeadAnim(inGameScene.level.levelData.plants[i].x, inGameScene.level.levelData.plants[i].y);
@@ -210,8 +211,8 @@ function Player() {
             }
 
             for (var i = 0; i < inGameScene.level.levelData.fires.length; i++) {
-                if (isCollided(this.x, this.y, 25, 35, inGameScene.level.levelData.fires[i].x, inGameScene.level.levelData.fires[i].y, 25, 15)) {
-                    setToDead();
+                if (isCollided(this.x, this.y + 10, 25, 25, inGameScene.level.levelData.fires[i].x, inGameScene.level.levelData.fires[i].y, 25, 15)) {
+                    this.setToDead();
                     this.visible = false;
                     this.initDeadAnim(inGameScene.level.levelData.fires[i].x, inGameScene.level.levelData.fires[i].y);
                     this.fire_sound.play();
@@ -219,23 +220,23 @@ function Player() {
             }
 
             for (var i = 0; i < inGameScene.level.levelData.claws.length; i++) {
-                if (isCollided(this.x, this.y, 25, 37, inGameScene.level.levelData.claws[i].x, inGameScene.level.levelData.claws[i].y, 26, 33)) {
-                    setToDead();
+                if (isCollided(this.x, this.y + 10, 25, 25, inGameScene.level.levelData.claws[i].x, inGameScene.level.levelData.claws[i].y, 26, 33)) {
+                    this.setToDead();
                     this.visible = false;
                     this.initDeadAnim(inGameScene.level.levelData.claws[i].x, inGameScene.level.levelData.claws[i].y);
                 }
             }
 
             for (var i = 0; i < inGameScene.level.levelData.traps; i++) {
-                if (isCollided(this.x, this.y + 50, 25, 37, inGameScene.level.traps[i].x + 33, inGameScene.level.levelData.traps[i].y + 50, 127, 62)) {
+                if (isCollided(this.x, this.y + 10, 25, 25, inGameScene.level.levelData.traps[i].x + 33, inGameScene.level.levelData.levelData.traps[i].y + 50, 127, 62)) {
                     this.setToDead();
                     this.visible = false;
-                    this.initDeadAnim(inGameScene.level.levelData.traps[i].x + 76, inGameScene.level.levelData.traps[i].y + 46);
+                    this.initDeadAnim(inGameScene.level.levelData.levelData.traps[i].x + 76, inGameScene.level.levelData.traps[i].y + 46);
                 }
             }
         }
 
-        if (this.y < -10) {
+        if (this.y < -20) {
             this.y = 501;
         }
 
@@ -335,6 +336,7 @@ function Player() {
 
     this.resetState = function() {
         this.dead = false;
+        this.direction = 0;
         this.time = 1998;
         this.visible = true;
         this.animator.switchAnim(0);
