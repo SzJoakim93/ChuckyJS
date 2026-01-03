@@ -4,11 +4,24 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-    keystates[e.which] = true;
+  keystates[e.which] = true;
+
+  if (e.key === "Enter" && scene.select) {
+    scene.select();
+  } else if ((e.key === "Up" || e.key === "ArrowUp") && scene.selectPrev) {
+    scene.selectPrev();
+  } else if ((e.key === "Down" || e.key === "ArrowDown") && scene.selectNext) {
+    scene.selectNext();
+  } else if ((e.key >= "a" && e.key <= "z"
+      || e.key >= "A" && e.key <= "Z" && e.key.length === 1
+      || e.key >= '0' && e.key <= 9
+      || e.key === "Backspace") && scene.inputChar) {
+    scene.inputChar(e.key)
+  }
 }
 
 function keyUpHandler(e) {
-    keystates[e.which] = false;
+  keystates[e.which] = false;
 }
 
 

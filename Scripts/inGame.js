@@ -66,10 +66,10 @@ function InGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.drawImage(this.table, 80, 0);
-        drawText(170, 30, "yellow", 18, this.player.lives.toString());
-        drawText(280, 30, "lightblue", 18, this.player.points.toString());
-        drawText(440, 30, "lightgreen", 18, this.player.bonus.toString());
-        drawText(560, 30, "red", 18, Math.floor(this.player.time/2).toString());
+        drawText(185, 32, "yellow", 18, this.player.lives.toString(), "right");
+        drawText(358, 32, "lightblue", 18, this.player.points.toString(), "right");
+        drawText(482, 32, "lightgreen", 18, this.player.bonus.toString(), "right");
+        drawText(595, 32, "red", 18, Math.floor(this.player.time/2).toString(), "right");
 
         this.level.rendering();
         this.player.rendering();

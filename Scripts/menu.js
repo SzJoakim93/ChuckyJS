@@ -10,12 +10,6 @@ function Menu() {
             if (keystates[KEY_SPACE]) {
                 inGameScene.newGame();
                 screenChange.change(function() { scene = inGameScene; });
-            } else if (keystates[KEY_RETURN]) {
-                if (inGameScene.difficult === 'Easy') {
-                    inGameScene.difficult = "HardCore";
-                } else {
-                    inGameScene.difficult = "Easy";
-                }
             }
         }
 
@@ -27,9 +21,19 @@ function Menu() {
     this.rendering = function() {
         if (this.subScene === 0) {
             ctx.drawImage(this.main_scene, 0, 0);
-            drawText(310, 412, white, 15, inGameScene.difficult);
+            drawText(320, 430, white, 15, inGameScene.difficult, "center");
         } else {
             ctx.drawImage(this.info_scene, 0, 0);
+        }
+    }
+
+    this.select = function() {
+        if (this.subScene === 0) {
+            if (inGameScene.difficult === 'Easy') {
+                inGameScene.difficult = "HardCore";
+            } else {
+                inGameScene.difficult = "Easy";
+            }
         }
     }
 }

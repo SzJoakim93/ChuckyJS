@@ -13,9 +13,12 @@ scoreScene.load();
 canvas.width = 640;
 canvas.height = 480;
 
+var scaleX;
+var scaleY;
+
 function sizeCanvas() {
-    var scaleX = (innerWidth - 20) / canvas.width;
-    var scaleY = (innerHeight - 20) / canvas.height;
+    scaleX = (innerWidth - canvas.offsetLeft) / canvas.width;
+    scaleY = (innerHeight - canvas.offsetTop) / canvas.height;
 
     var scaleToFit = Math.min(scaleX, scaleY);
 
@@ -26,9 +29,10 @@ function sizeCanvas() {
 sizeCanvas();
 addEventListener("resize", sizeCanvas);
 
-function drawText(x, y, color, size,text) {
+function drawText(x, y, color, size, text, aling) {
     ctx.font = size.toString() + "px Arial";
     ctx.fillStyle = color;
+    ctx.textAlign = aling;
     ctx.fillText(text.toString(), x, y);
 }
 
@@ -57,14 +61,6 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 document.addEventListener("click", clickHandler, false);
 
-function keyDownHandler(e) {
-    if (scene === scoreScene) {
-        if (e.key >= "a" && e.key <= "z" || e.key === "Backspace") {
-            scene.inputChar(e.key)
-        }
-    }
-}
-
 function mouseMoveHandler(e) {
     if (scene === scoreScene) {
         scene.mouseMove(e);
@@ -89,7 +85,6 @@ gameloop: {
         scene.handleEvents();
         scene.rendering();
     }
-    //_requestAnimationFrame(main);
 }
 
 limitLoop(main, 30);

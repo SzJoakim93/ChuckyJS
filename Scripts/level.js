@@ -187,25 +187,47 @@ function Level() {
     }
 
     this.load = function(level) {
-        this.gate.switchAnim(0);
         this.chickens = [];
+        this.floors = [];
+        this.floorsRuinable = [];
+        this.floorsPeriodic = [];
+        this.climpers = [];
+        this.lifts = [];
+        this.sands = [];
+        this.fires = [];
+        
+        this.gate.switchAnim(0);
+
         this.levelData = levelData[level]();
         this.bigChicken.isActive = this.levelData.isBigChickenActive;
         this.bigChicken.reset();
+        var difficult = inGameScene.difficult === "Easy" ? 'e' : 'h';
         for (var i = 0; i < this.levelData.chickens.length; i++) {
-            this.chickens[i] = new Chicken(
+            if (this.levelData.chickens[i].diffFilter !== 'a' && difficult !== this.levelData.chickens[i].diffFilter) {
+                continue;
+            }
+
+            this.chickens.push(new Chicken(
                 this.levelData.chickens[i].x,
                 this.levelData.chickens[i].y,
                 1,
                 this.levelData.chickens[i].speed,
                 this.levelData.chickens[i].triggers
-            );
+            ));
         }
         for (var i = 0; i < this.levelData.floors.length; i++) {
-            this.floors[i] = new FloorStatic(this.levelData.floors[i].x, this.levelData.floors[i].y, this.levelData.floors[i].size, this.levelData.levelStyle.floor);
+            if (this.levelData.floors[i].diffFilter !== 'a' && difficult !== this.levelData.floors[i].diffFilter) {
+                continue;
+            }
+
+            this.floors.push(new FloorStatic(this.levelData.floors[i].x, this.levelData.floors[i].y, this.levelData.floors[i].size, this.levelData.levelStyle.floor));
         }
 
         for (var i = 0; i < this.levelData.dynamic_floors.length; i++) {
+            if (this.levelData.dynamic_floors[i].diffFilter !== 'a' && difficult !== this.levelData.dynamic_floors[i].diffFilter) {
+                continue;
+            }
+
             if (this.levelData.dynamic_floors[i].type === 0) {
                 this.floorsRuinable.push(new FloorRuinable(this.levelData.dynamic_floors[i].x, this.levelData.dynamic_floors[i].y, this.levelData.dynamic_floors[i].size, this.levelData.levelStyle.floor));
             } else {
@@ -214,20 +236,29 @@ function Level() {
         }
 
         for (var i = 0; i < this.levelData.sands.length; i++) {
-            this.sands[i] = new MultipleAnimator(this.sand_anim, this.levelData.sands[i].x, this.levelData.sands[i].y, 20);
+            if (this.levelData.sands[i].diffFilter !== 'a' && difficult !== this.levelData.sands[i].diffFilter) {
+                continue;
+            }
+
+            this.sands.push(new MultipleAnimator(this.sand_anim, this.levelData.sands[i].x, this.levelData.sands[i].y, 20));
         }
 
         for (var i = 0; i < this.levelData.fires.length; i++) {
-            this.fires[i] = new Animation(this.fire_graph, this.levelData.fires[i].x, this.levelData.fires[i].y, 22, 15, 6, 1, 22, 15, 20);
+            if (this.levelData.fires[i].diffFilter !== 'a' && difficult !== this.levelData.fires[i].diffFilter) {
+                continue;
+            }
+
+            this.fires.push(new Animation(this.fire_graph, this.levelData.fires[i].x, this.levelData.fires[i].y, 22, 15, 6, 1, 22, 15, 20));
         }
 
         for (var i = 0; i < this.levelData.lifts.length; i++) {
-            this.lifts[i] = new Lift(this.levelData.lifts[i].x, this.levelData.lifts[i].y, this.levelData.lifts[i].size, this.levelData.lifts[i].type, this.levelData.lifts[i].direction);
+            this.lifts.push(new Lift(this.levelData.lifts[i].x, this.levelData.lifts[i].y, this.levelData.lifts[i].size, this.levelData.lifts[i].type, this.levelData.lifts[i].direction));
         }
 
         this.remaining = this.levelData.eggs.length;
         inGameScene.player.x = this.levelData.playerCoord.x;
         inGameScene.player.y = this.levelData.playerCoord.y;
+        inGameScene.player.resetState();
     }
 
     this.reset = function() {

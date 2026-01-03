@@ -564,20 +564,20 @@ var levelData = [
                 { x: 592, y: 134, size: 250, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 259, y: 72, size: 79, type: 0, diffFilter: 'a' },
+                { x: 273, y: 72, size: 79, type: 0, diffFilter: 'a' },
             ],
             chickens: [
-                { x: 449, y: 37, speed: 2, diffFilter: 'a', triggers: [
-                  { x: 351, y: 37, direction: 0, diffFilter: 'a' },
-                  { x: 493, y: 37, direction: 1, diffFilter: 'a' },
-                  { x: 510, y: 37, direction: 0, diffFilter: 'a' },
-                  { x: 463, y: 148, direction: 0, diffFilter: 'a' },
-                  { x: 493, y: 148, direction: 2, diffFilter: 'a' },
-                  { x: 592, y: 148, direction: 1, diffFilter: 'a' },
-                  { x: 635, y: 148, direction: 0, diffFilter: 'a' },
-                  { x: 464, y: 254, direction: 0, diffFilter: 'a' },
-                  { x: 592, y: 254, direction: 2, diffFilter: 'a' },
-                  { x: 635, y: 254, direction: 0, diffFilter: 'a' },
+                { x: 449, y: 37, speed: 2, diffFilter: 'h', triggers: [
+                  { x: 351, y: 37, direction: 0, diffFilter: 'h' },
+                  { x: 493, y: 37, direction: 1, diffFilter: 'h' },
+                  { x: 510, y: 37, direction: 0, diffFilter: 'h' },
+                  { x: 463, y: 148, direction: 0, diffFilter: 'h' },
+                  { x: 493, y: 148, direction: 2, diffFilter: 'h' },
+                  { x: 592, y: 148, direction: 1, diffFilter: 'h' },
+                  { x: 635, y: 148, direction: 0, diffFilter: 'h' },
+                  { x: 464, y: 254, direction: 0, diffFilter: 'h' },
+                  { x: 592, y: 254, direction: 2, diffFilter: 'h' },
+                  { x: 635, y: 254, direction: 0, diffFilter: 'h' },
                 ]
                 },
                 { x: 60, y: 118, speed: 2, diffFilter: 'a', triggers: [
@@ -647,7 +647,7 @@ var levelData = [
                 { x: 472, y: 278, diffFilter: 'a' },
             ],
             lives: [
-                { x: 560, y: 88, diffFilter: 'a' },
+                { x: 560, y: 110, diffFilter: 'a' },
             ],
             plants: [
                 { x: 256, y: 338, diffFilter: 'a' },
@@ -730,9 +730,9 @@ var levelData = [
                 { x: 576, y: 344, diffFilter: 'a' },
             ],
             lives: [
-                { x: 17, y: 128, diffFilter: 'e' },
+                { x: 17, y: 110, diffFilter: 'e' },
                 { x: 376, y: 104, diffFilter: 'a' },
-                { x: 440, y: 360, diffFilter: 'a' },
+                { x: 440, y: 370, diffFilter: 'a' },
             ],
             plants: [
             ],
@@ -844,30 +844,30 @@ var levelData = [
                 { x: 280, y: 72, size: 376, diffFilter: 'a' },
                 { x: 392, y: 144, size: 56, diffFilter: 'a' },
                 { x: 168, y: 160, size: 184, diffFilter: 'a' },
-                { x: 552, y: 200, size: 56, diffFilter: 'a' },
+                { x: 542, y: 200, size: 56, diffFilter: 'a' },
                 { x: 80, y: 264, size: 184, diffFilter: 'a' },
                 { x: 328, y: 264, size: 120, diffFilter: 'a' },
                 { x: 368, y: 320, size: 56, diffFilter: 'a' },
                 { x: 56, y: 336, size: 184, diffFilter: 'a' },
-                { x: 552, y: 336, size: 56, diffFilter: 'a' },
+                { x: 542, y: 336, size: 56, diffFilter: 'a' },
                 { x: 240, y: 360, size: 120, diffFilter: 'a' },
                 { x: 80, y: 464, size: 376, diffFilter: 'a' },
                 { x: 528, y: 464, size: 120, diffFilter: 'a' },
             ],
             climpers: [
                 { x: 183, y: 122, size: 142, diffFilter: 'a' },
-                { x: 616, y: 34, size: 406, diffFilter: 'a' },
+                { x: 606, y: 34, size: 426, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 80, y: 152, size: 42, type: 0, diffFilter: 'a' },
+                { x: 80, y: 152, size: 56, type: 0, diffFilter: 'a' },
             ],
             chickens: [
             ],
             eggs: [
                 { x: 240, y: 44, diffFilter: 'a' },
-                { x: 568, y: 62, diffFilter: 'a' },
+                { x: 558, y: 62, diffFilter: 'a' },
                 { x: 104, y: 89, diffFilter: 'a' },
-                { x: 568, y: 126, diffFilter: 'a' },
+                { x: 558, y: 126, diffFilter: 'a' },
                 { x: 408, y: 134, diffFilter: 'a' },
                 { x: 216, y: 150, diffFilter: 'a' },
                 { x: 312, y: 150, diffFilter: 'a' },
@@ -875,7 +875,7 @@ var levelData = [
                 { x: 152, y: 254, diffFilter: 'a' },
                 { x: 336, y: 254, diffFilter: 'a' },
                 { x: 416, y: 254, diffFilter: 'a' },
-                { x: 568, y: 262, diffFilter: 'a' },
+                { x: 558, y: 262, diffFilter: 'a' },
                 { x: 384, y: 310, diffFilter: 'a' },
                 { x: 184, y: 326, diffFilter: 'a' },
                 { x: 296, y: 350, diffFilter: 'a' },
@@ -884,13 +884,13 @@ var levelData = [
             ],
             sands: [
                 { x: 192, y: 61, diffFilter: 'a' },
-                { x: 568, y: 189, diffFilter: 'a' },
+                { x: 558, y: 189, diffFilter: 'a' },
                 { x: 96, y: 253, diffFilter: 'a' },
                 { x: 221, y: 253, diffFilter: 'a' },
                 { x: 72, y: 325, diffFilter: 'a' },
-                { x: 568, y: 325, diffFilter: 'a' },
+                { x: 558, y: 325, diffFilter: 'a' },
                 { x: 300, y: 453, diffFilter: 'a' },
-                { x: 377, y: 253, diffFilter: 'e' },
+                { x: 377, y: 61, diffFilter: 'e' },
             ],
             goldEggs: [
                 { x: 112, y: 48, diffFilter: 'a' },
@@ -945,7 +945,7 @@ var levelData = [
                 { x: 597, y: 232, size: 226, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 265, y: 202, size: 72, type: 1, diffFilter: 'a' },
+                { x: 265, y: 202, size: 88, type: 1, diffFilter: 'a' },
             ],
             chickens: [
                 { x: 76, y: 72, speed: 2, diffFilter: 'h', triggers: [
@@ -1053,8 +1053,8 @@ var levelData = [
                 { x: 584, y: 41, size: 142, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 200, y: 249, size: 57, type: 1, diffFilter: 'a' },
-                { x: 178, y: 465, size: 93, type: 1, diffFilter: 'a' },
+                { x: 200, y: 249, size: 56, type: 1, diffFilter: 'a' },
+                { x: 178, y: 465, size: 120, type: 1, diffFilter: 'a' },
             ],
             chickens: [
                 { x: 361, y: 27, speed: 2, diffFilter: 'a', triggers: [
@@ -1171,12 +1171,12 @@ var levelData = [
             climpers: [
                 { x: 16, y: 118, size: 346, diffFilter: 'a' },
                 { x: 400, y: 101, size: 154, diffFilter: 'a' },
-                { x: 432, y: 222, size: 154, diffFilter: 'a' },
-                { x: 608, y: 118, size: 346, diffFilter: 'a' },
+                { x: 432, y: 222, size: 124, diffFilter: 'a' },
+                { x: 608, y: 70, size: 386, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 176, y: 161, size: 75, type: 1, diffFilter: 'a' },
-                { x: 121, y: 352, size: 70, type: 0, diffFilter: 'a' },
+                { x: 180, y: 161, size: 88, type: 1, diffFilter: 'a' },
+                { x: 117, y: 351, size: 88, type: 0, diffFilter: 'a' },
             ],
             chickens: [
                 { x: 54, y: 126, speed: 2, diffFilter: 'a', triggers: [
@@ -1254,7 +1254,7 @@ var levelData = [
             ],
             lives: [
                 { x: 152, y: 96, diffFilter: 'a' },
-                { x: 454, y: 377, diffFilter: 'e' },
+                { x: 454, y: 390, diffFilter: 'e' },
             ],
             plants: [
                 { x: 228, y: 329, diffFilter: 'h' },
@@ -1299,8 +1299,8 @@ var levelData = [
                 { x: 592, y: 323, size: 142, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 272, y: 72, size: 76, type: 1, diffFilter: 'a' },
-                { x: 160, y: 464, size: 76, type: 1, diffFilter: 'a' },
+                { x: 272, y: 72, size: 88, type: 1, diffFilter: 'a' },
+                { x: 160, y: 464, size: 88, type: 1, diffFilter: 'a' },
             ],
             chickens: [
                 { x: 469, y: 37, speed: 2, diffFilter: 'a', triggers: [
@@ -1420,8 +1420,8 @@ var levelData = [
                 { x: 544, y: 122, size: 238, diffFilter: 'a' },
             ],
             dynamic_floors: [
-                { x: 17, y: 464, size: 42, type: 0, diffFilter: 'a' },
-                { x: 568, y: 464, size: 42, type: 0, diffFilter: 'a' },
+                { x: 17, y: 464, size: 56, type: 0, diffFilter: 'a' },
+                { x: 568, y: 464, size: 56, type: 0, diffFilter: 'a' },
             ],
             chickens: [
                 { x: 39, y: 141, speed: 2, diffFilter: 'a', triggers: [

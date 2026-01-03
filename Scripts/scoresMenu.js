@@ -3,13 +3,15 @@ function ScoresMenu() {
     this.game_over = new Image();
     this.high_scene = new Image();
     this.win_graph = new Image();
-    this.reset_graph = new Image();
     this.focus = new Image();
+    this.popPupPanel = new Image();
+    this.inputBox = new Image();
     this.game_over.src = "GFX/GameOver.png";
     this.high_scene.src = "GFX/HighScores.png";
     this.win_graph.src = "GFX/WinScreen.png";
-    this.reset_graph.src = "GFX/ResetScore.png";
     this.focus.src = "GFX/Focus.png";
+    this.popPupPanel.src = "GFX/PopUpPanel.png";
+    this.inputBox.src = "GFX/InputBox.png";
     this.highScores = [];
 
     this.currentName = "";
@@ -44,6 +46,12 @@ function ScoresMenu() {
                 }
                 break;
             case 4:
+                if (keystates[KEY_Y]) {
+                    this.resetScore();
+                    this.subScene = 0;
+                } else if (keystates[KEY_N]) {
+                    this.subScene = 0;
+                }
                 break;
         }
 
@@ -56,9 +64,9 @@ function ScoresMenu() {
                 ctx.drawImage(this.high_scene, 0, 0);
 
                 for (var i = 0; i < this.highScores.length; i++) {
-                    drawText(248, 90 + (i*20), i === this.currentPos ? gold : white, 15, i+1);
-                    drawText(280, 90 + (i*20), i === this.currentPos ? gold : white, 15, this.highScores[i].Name);
-                    drawText(520, 90 + (i*20), i === this.currentPos ? gold : white, 15, this.highScores[i].Score);
+                    drawText(255, 90 + (i*20), i === this.currentPos ? gold : white, 15, i + 1, "left");
+                    drawText(280, 90 + (i*20), i === this.currentPos ? gold : white, 15, this.highScores[i].Name, "left");
+                    drawText(580, 90 + (i*20), i === this.currentPos ? gold : white, 15, this.highScores[i].Score, "right");
                 }
 
                 if (this.selected === 0) {
@@ -72,8 +80,10 @@ function ScoresMenu() {
                 }
                 break;
             case 1:
-                drawText(193, 316, white, 15, "Add high score and press enter");
-                drawText(193, 336, white, 15, this.currentName);
+                ctx.drawImage(this.popPupPanel, 148, 200);
+                ctx.drawImage(this.inputBox, 201, 261);
+                drawText(148 + 171, 240, gold, 15, "Add name of high score and press enter", "center");
+                drawText(205, 275, white, 15, this.currentName + "|", "left");
                 break;
             case 2:
                 ctx.drawImage(this.game_over, 0, 0);
@@ -82,7 +92,9 @@ function ScoresMenu() {
                 ctx.drawImage(this.win_graph, 0, 0);
                 break;
             case 4:
-                ctx.drawImage(this.reset_graph, 226, 177);
+                ctx.drawImage(this.popPupPanel, 148, 200);
+                drawText(148 + 171, 250, gold, 15, "Reset scores?", "center");
+                drawText(148 + 171, 270, gold, 15, "(Y/N)", "center");
                 break;
         }
     }
@@ -91,7 +103,7 @@ function ScoresMenu() {
         if (this.subScene === 1) {
             if (c === "Backspace") {
                 this.currentName = this.currentName.slice(0, -1); 
-            } else {
+            } else if (this.currentName.length < 16) {
                 this.currentName += c;
             }
         }
@@ -99,10 +111,15 @@ function ScoresMenu() {
 
     this.load = function() {
         this.currentPos = 16;
-        //this.difficult = difficult;
         this.highScores = JSON.parse(loadData("chucky_high_scores"));
         if (this.highScores === null) {
             this.resetScore();
+        }
+    }
+
+    this.save = function() {
+        if (this.highScores) {
+            saveData(JSON.stringify(this.highScores));
         }
     }
 
@@ -135,39 +152,16 @@ function ScoresMenu() {
                 break;
             }
         }
-        //this.save();
+        this.save();
     }
 
     this.mouseClick = function(e) {
-        if (this.subScene === 0) {
-            if (this.mouseCoord.y > 112 && this.mouseCoord.y < 136) {
-                screenChange.change(function() { scene = menuScene; });
-            } else if (this.mouseCoord.y > 199 && this.mouseCoord.y < 223) {
-                screenChange.change(function() {
-                    scene = inGameScene;
-                    inGameScene.newGame();
-                });
-            } else if (this.mouseCoord.y > 285 && this.mouseCoord.y < 310) {
-                quit = true;
-            } else if (this.mouseCoord.y > 409 && this.mouseCoord.y < 434) {
-                this.subScene = 4;
-            }
-
-        } else if (this.subScene === 1) {
-            
-        } else if (this.subScene === 4) {
-            if (this.mouseCoord.x > 245 && this.mouseCoord.x < 309) {
-                this.resetScore();
-                this.subScene = 0;
-            } else if (this.mouseCoord.x > 351 && this.mouseCoord.x < 415) {
-                this.subScene = 0;
-            }
-        }
+        this.select();
     }
 
     this.mouseMove = function(e) {
-        this.mouseCoord.x = e.clientX - canvas.offsetLeft;
-        this.mouseCoord.y = e.clientY - canvas.offsetTop;
+        this.mouseCoord.x = (e.clientX - canvas.offsetLeft) / scaleX;
+        this.mouseCoord.y = (e.clientY - canvas.offsetTop) / scaleY;
 
         if (this.mouseCoord.y > 112 && this.mouseCoord.y < 136) {
             this.selected = 0;
@@ -179,6 +173,42 @@ function ScoresMenu() {
             this.selected = 3;
         } else {
             this.selected = -1;
+        }
+    }
+    
+    this.selectPrev = function() {
+        this.selected--;
+        if (this.selected < 0) {
+            this.selectPrev = 3;
+        }
+    }
+
+    this.selectNext = function() {
+        this.selected++;
+        if (this.selected > 3) {
+            this.selected = 0;
+        }
+    }
+
+    this.select = function() {
+        if (this.subScene === 0) {
+            switch (this.selected) {
+                case 0:
+                    screenChange.change(function() { scene = menuScene; });
+                    break;
+                case 1:
+                    screenChange.change(function() {
+                        scene = inGameScene;
+                        inGameScene.newGame();
+                    });
+                    break;
+                case 2:
+                    quit = true;
+                    break;
+                case 3:
+                    this.subScene = 4;
+                    break;
+            }
         }
     }
 }

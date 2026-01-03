@@ -56,7 +56,13 @@ function Player() {
                 } else {
                     this.animator.switchAnim(1);
                 }
-            } else if (this.jump === -11) {
+            } else if (this.jump > -11) {
+                if (this.direction > 0) {
+                    this.direction--;
+                } else if (this.direction < 0) {
+                    this.direction++;
+                }
+            } else {
                 this.direction = 0;
                 if (this.animator.currAnim === 3) {
                     this.animator.switchAnim(2);
@@ -135,11 +141,17 @@ function Player() {
                         this.x = inGameScene.level.levelData.climpers[i].x + 2;
                         this.y -= 6;
                         this.animator.switchAnim(5);
-                    } else if (keystates[KEY_DOWN]) {
+                    } else if (!keystates[KEY_DOWN] && this.animator.currAnim === 5) {
+                        this.animator.switchAnim(4);
+                    }
+                }
+                
+                if (isCollided(this.x, this.y + 37, 25, 1, inGameScene.level.levelData.climpers[i].x, inGameScene.level.levelData.climpers[i].y, 27, inGameScene.level.levelData.climpers[i].size)) {
+                    if (keystates[KEY_DOWN]) {
                         this.x = inGameScene.level.levelData.climpers[i].x + 2;
                         this.y += 6;
                         this.animator.switchAnim(5);
-                    } else if (this.animator.currAnim === 5) {
+                    } else if (!keystates[KEY_UP] && this.animator.currAnim === 5) {
                         this.animator.switchAnim(4);
                     }
                 }
@@ -195,7 +207,7 @@ function Player() {
                 if (inGameScene.level.sands[i].currAnim === 0 && isCollided(this.x, this.y, 25, 37, inGameScene.level.sands[i].x, inGameScene.level.sands[i].y, 36, 10)) {
                     inGameScene.pickup_sand.play();
                     inGameScene.level.sands[i].switchAnim(1);
-                    this.time += 10;
+                    this.time += 20;
                     this.points += 1;
                 }
             }
@@ -324,7 +336,7 @@ function Player() {
     }
 
     this.setNewGame = function() {
-        if (inGameScene.difficult[0] === 'e') {
+        if (inGameScene.difficult === 'Easy') {
             this.lives = 5;
         } else {
             this.lives = 3;

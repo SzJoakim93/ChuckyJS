@@ -12,7 +12,7 @@ function Chicken(x, y, dir, speed, triggers) {
     this.dir = dir;
     this.speed = speed;
     this.triggers = triggers;
-    this.animator = new MultipleAnimator(chickenAnim, x, y, 10);
+    this.animator = new MultipleAnimator(chickenAnim, x, y, 15);
     //this.animator.switchAnim(dir === 0 || dir === 2 ? 3 : 0);
 
     this.handleEvents = function() {
