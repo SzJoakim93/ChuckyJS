@@ -7,12 +7,13 @@ chickenAnim.animations.push({ from: 5, to: 6, direction: 1, nextAnim: null }); /
 chickenAnim.animations.push({ from: 7, to: 7, direction: 1, nextAnim: null }); //5: attacked left
 chickenAnim.animations.push({ from: 8, to: 9, direction: 1, nextAnim: null }); //6: climping
 
-function Chicken(x, y, dir, speed, triggers) {
+function Chicken(x, y, dir, speed, triggers, index) {
     this.coord = { x: x, y: y };
     this.dir = dir;
     this.speed = speed;
     this.triggers = triggers;
     this.animator = new MultipleAnimator(chickenAnim, x, y, 15);
+    this.index = index;
     //this.animator.switchAnim(dir === 0 || dir === 2 ? 3 : 0);
 
     this.handleEvents = function() {

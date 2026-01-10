@@ -119,7 +119,7 @@ function ScoresMenu() {
 
     this.save = function() {
         if (this.highScores) {
-            saveData(JSON.stringify(this.highScores));
+            saveData("chucky_high_scores", JSON.stringify(this.highScores));
         }
     }
 

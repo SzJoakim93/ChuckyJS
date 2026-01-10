@@ -212,7 +212,8 @@ function Level() {
                 this.levelData.chickens[i].y,
                 1,
                 this.levelData.chickens[i].speed,
-                this.levelData.chickens[i].triggers
+                this.levelData.chickens[i].triggers,
+                i
             ));
         }
         for (var i = 0; i < this.levelData.floors.length; i++) {
@@ -263,7 +264,7 @@ function Level() {
 
     this.reset = function() {
         for (var i = 0; i < this.chickens.length; i++) {
-            this.chickens[i].coord = { x: this.levelData.chickens[i].x, y: this.levelData.chickens[i].y };
+            this.chickens[i].coord = { x: this.levelData.chickens[this.chickens[i].index].x, y: this.levelData.chickens[this.chickens[i].index].y };
             this.chickens[i].dir = 1;
             this.chickens[i].animator.switchAnim(0);
         }
