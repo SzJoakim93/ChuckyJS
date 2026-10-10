@@ -26,7 +26,7 @@ function InGame() {
     this.difficult = "Easy";
 
     this.handleEvents = function() {
-        if (keystates[KEY_SPACE] && this.completed) {
+        if ((keystates[KEY_SPACE] || isActionPressed("a", false)) && this.completed) {
             this.currentLevel++;
             this.player.points += this.player.bonus;
             if (this.currentLevel > levelData.length) {
@@ -44,7 +44,7 @@ function InGame() {
 
         if (!this.completed) {
             if (!this.player.dead) {
-                if (keystates[KEY_LEFT] || keystates[KEY_RIGHT]) {
+                if (keystates[KEY_LEFT] || keystates[KEY_RIGHT] || isActionPressed("left", false) || isActionPressed("right", false)) {
                     if (!this.start) {
                         this.start = true;
                         if (this.level.bigChicken.isActive && this.level.gate.currAnim === 0) {

@@ -40,7 +40,7 @@ function Player() {
 
     this.handleEvents = function() {
         if (!this.dead) {
-            if (keystates[KEY_LEFT]) {
+            if (keystates[KEY_LEFT] || isActionPressed("left", false)) {
                     this.direction = -8;
 
                 if (this.gravity || this.jump > -11) {
@@ -48,7 +48,7 @@ function Player() {
                 } else {
                     this.animator.switchAnim(3);
                 }
-            } else if (keystates[KEY_RIGHT]) {
+            } else if (keystates[KEY_RIGHT] || isActionPressed("right", false)) {
                     this.direction = 8;
                     
                 if (this.gravity || this.jump > -11) {
@@ -79,7 +79,7 @@ function Player() {
 
             this.x += this.direction;
 
-            if ((keystates[KEY_RSHIFT] || keystates[KEY_LSHIFT]) && this.jump === -11 && !this.gravity) {
+            if ((keystates[KEY_RSHIFT] || keystates[KEY_LSHIFT] || isActionPressed("a", false)) && this.jump === -11 && !this.gravity) {
                 this.jump = 11;
                 this.jump_sound.play();
             }
@@ -137,21 +137,21 @@ function Player() {
             for (var i = 0; i < inGameScene.level.levelData.climpers.length; i++) {
                 if (isCollided(this.x, this.y, 25, 1, inGameScene.level.levelData.climpers[i].x, inGameScene.level.levelData.climpers[i].y, 27, inGameScene.level.levelData.climpers[i].size)) {
                     this.gravity = false;
-                    if (keystates[KEY_UP]) {
+                    if (keystates[KEY_UP] || isActionPressed("up", false)) {
                         this.x = inGameScene.level.levelData.climpers[i].x + 2;
                         this.y -= 6;
                         this.animator.switchAnim(5);
-                    } else if (!keystates[KEY_DOWN] && this.animator.currAnim === 5) {
+                    } else if (!keystates[KEY_DOWN] && !isActionPressed("down", false) && this.animator.currAnim === 5) {
                         this.animator.switchAnim(4);
                     }
                 }
                 
                 if (isCollided(this.x, this.y + 37, 25, 1, inGameScene.level.levelData.climpers[i].x, inGameScene.level.levelData.climpers[i].y, 27, inGameScene.level.levelData.climpers[i].size)) {
-                    if (keystates[KEY_DOWN]) {
+                    if (keystates[KEY_DOWN] || isActionPressed("down", false)) {
                         this.x = inGameScene.level.levelData.climpers[i].x + 2;
                         this.y += 6;
                         this.animator.switchAnim(5);
-                    } else if (!keystates[KEY_UP] && this.animator.currAnim === 5) {
+                    } else if (!keystates[KEY_UP] && !isActionPressed("up", false) && this.animator.currAnim === 5) {
                         this.animator.switchAnim(4);
                     }
                 }

@@ -7,13 +7,13 @@ function Menu() {
     this.subScene = 0;
     this.handleEvents = function() {
         if (this.subScene === 0) {
-            if (keystates[KEY_SPACE]) {
+            if (keystates[KEY_SPACE] || isActionPressed("x", false)) {
                 inGameScene.newGame();
                 screenChange.change(function() { scene = inGameScene; });
             }
         }
 
-        if (keystates[KEY_LSHIFT] || keystates[KEY_RSHIFT]) {
+        if (keystates[KEY_LSHIFT] || keystates[KEY_RSHIFT] || isActionPressed("b", false)) {
             screenChange.change(function() { menuScene.subScene = menuScene.subScene === 0 ? 1 : 0; });
         }
     }
