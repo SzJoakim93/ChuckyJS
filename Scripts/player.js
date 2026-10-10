@@ -336,7 +336,7 @@ function Player() {
     }
 
     this.setNewGame = function() {
-        if (inGameScene.difficult === 'Easy') {
+        if (inGameScene.difficult === EASY) {
             this.lives = 5;
         } else {
             this.lives = 3;

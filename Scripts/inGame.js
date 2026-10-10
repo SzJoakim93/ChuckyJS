@@ -1,3 +1,6 @@
+var EASY = 0;
+var HARDCORE = 1;
+
 function InGame() {
     this.comp_table = new Image();
     this.comp_table.src = "GFX/CompTable.png";
@@ -23,25 +26,9 @@ function InGame() {
     this.level = new Level();
     this.player = new Player();
 
-    this.difficult = "Easy";
+    this.difficult = EASY;
 
     this.handleEvents = function() {
-        if ((keystates[KEY_SPACE] || isActionPressed("a", false)) && this.completed) {
-            this.currentLevel++;
-            this.player.points += this.player.bonus;
-            if (this.currentLevel > levelData.length) {
-                this.player.points += this.player.lives * 50;
-                scoreScene.currentScore = this.points;
-                scoreScene.subScene = 3;
-                screenChange.change(function() { scene = scoreScene; });
-            } else {
-                this.completed = false;
-                this.showCompPanel = false;
-                this.start = false;
-                screenChange.change(function() { inGameScene.level.load(inGameScene.currentLevel); });
-            }
-        }
-
         if (!this.completed) {
             if (!this.player.dead) {
                 if (keystates[KEY_LEFT] || keystates[KEY_RIGHT] || isActionPressed("left", false) || isActionPressed("right", false)) {
@@ -57,6 +44,22 @@ function InGame() {
 
             this.player.handleEvents();
             this.level.handleEvents();
+        }
+
+        if ((keystates[KEY_SPACE] || keystates[KEY_RETURN] || keystates[KEY_LSHIFT] || isActionPressed("a", false)) && this.completed) {
+            this.currentLevel++;
+            this.player.points += this.player.bonus;
+            if (this.currentLevel > levelData.length) {
+                this.player.points += this.player.lives * 50;
+                scoreScene.currentScore = this.points;
+                scoreScene.subScene = 3;
+                screenChange.change(function() { scene = scoreScene; });
+            } else {
+                this.completed = false;
+                this.showCompPanel = false;
+                this.start = false;
+                screenChange.change(function() { inGameScene.level.load(inGameScene.currentLevel); });
+            }
         }
 
         this.completedTimeOut.handleEvent();

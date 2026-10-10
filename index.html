@@ -1,41 +1,72 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
 <head>
   <meta charset="utf-8" />
   <title>Chucky JS</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-<canvas id="myCanvas"></canvas>
+  <section class="touch-controls touch-controls-left" aria-label="Movement controls">
+    <button class="touch-button touch-button-up" data-key="38" aria-label="Move up">
+      <img src="GFX/TouchInputUI/ButtonBase.png" alt="">
+      <img src="GFX/TouchInputUI/ArrowUp.png" alt="">
+    </button>
+    <button class="touch-button touch-button-left" data-key="37" aria-label="Move left">
+      <img src="GFX/TouchInputUI/ButtonBase.png" alt="">
+      <img src="GFX/TouchInputUI/ArrowLeft.png" alt="">
+    </button>
+    <button class="touch-button touch-button-right" data-key="39" aria-label="Move right">
+      <img src="GFX/TouchInputUI/ButtonBase.png" alt="">
+      <img src="GFX/TouchInputUI/ArrowRight.png" alt="">
+    </button>
+    <button class="touch-button touch-button-down" data-key="40" aria-label="Move down">
+      <img src="GFX/TouchInputUI/ButtonBase.png" alt="">
+      <img src="GFX/TouchInputUI/ArrowDown.png" alt="">
+    </button>
+  </section>
 
-<script type="text/javascript" src="Scripts/Common/keyHandler.js"></script>
-<script type="text/javascript" src="Scripts/Common/keyCodes.js"></script>
-<script type="text/javascript" src="Scripts/Common/font.js"></script>
-<script type="text/javascript" src="Scripts/Common/clip.js"></script>
-<script type="text/javascript" src="Scripts/Common/animation.js"></script>
-<script type="text/javascript" src="Scripts/Common/multipleImage.js"></script>
-<script type="text/javascript" src="Scripts/Common/multipleAnimation.js"></script>
-<script type="text/javascript" src="Scripts/Common/storage.js"></script>
-<script type="text/javascript" src="Scripts/Common/sound.js"></script>
-<script type="text/javascript" src="Scripts/Common/timeoutEvent.js"></script>
-<script type="text/javascript" src="Scripts/Common/collision.js"></script>
-<script type="text/javascript" src="Scripts/Common/limitLoop.js"></script>
-<script type="text/javascript" src="Scripts/screenChange.js"></script>
-<script type="text/javascript" src="Scripts/chicken.js"></script>
-<script type="text/javascript" src="Scripts/bigChicken.js"></script>
-<script type="text/javascript" src="Scripts/floorStatic.js"></script>
-<script type="text/javascript" src="Scripts/floorRuinable.js"></script>
-<script type="text/javascript" src="Scripts/floorPeriodic.js"></script>
-<script type="text/javascript" src="Scripts/lift.js"></script>
-<script type="text/javascript" src="Scripts/player.js"></script>
-<script type="text/javascript" src="Scripts/levelData.js"></script>
-<script type="text/javascript" src="Scripts/level.js"></script>
-<script type="text/javascript" src="Scripts/menu.js"></script>
-<script type="text/javascript" src="Scripts/scoresMenu.js"></script>
-<script type="text/javascript" src="Scripts/inGame.js"></script>
-<script type="text/javascript" src="Scripts/main.js"></script>
+  <canvas id="myCanvas" width="640" height="480"></canvas>
+
+  <section class="touch-controls touch-controls-right" aria-label="Action controls">
+    <button class="touch-button touch-button-a" data-key="16" aria-label="A: jump">
+      <img src="GFX/TouchInputUI/ButtonBase.png" alt="">
+      <img src="GFX/TouchInputUI/ButtonA.png" alt="A">
+    </button>
+  </section>
+
+  <script type="text/javascript" src="Scripts/Common/keyHandler.js"></script>
+  <script type="text/javascript" src="Scripts/Common/keyCodes.js"></script>
+  <script type="text/javascript" src="Scripts/Common/touchControls.js"></script>
+  <script type="text/javascript" src="Scripts/Common/gamepad.js"></script>
+  <script type="text/javascript" src="Scripts/Common/font.js"></script>
+  <script type="text/javascript" src="Scripts/Common/clip.js"></script>
+  <script type="text/javascript" src="Scripts/Common/animation.js"></script>
+  <script type="text/javascript" src="Scripts/Common/multipleImage.js"></script>
+  <script type="text/javascript" src="Scripts/Common/multipleAnimation.js"></script>
+  <script type="text/javascript" src="Scripts/Common/storage.js"></script>
+  <script type="text/javascript" src="Scripts/Common/sound.js"></script>
+  <script type="text/javascript" src="Scripts/Common/timeoutEvent.js"></script>
+  <script type="text/javascript" src="Scripts/Common/collision.js"></script>
+  <script type="text/javascript" src="Scripts/Common/limitLoop.js"></script>
+  <script type="text/javascript" src="Scripts/screenChange.js"></script>
+  <script type="text/javascript" src="Scripts/chicken.js"></script>
+  <script type="text/javascript" src="Scripts/bigChicken.js"></script>
+  <script type="text/javascript" src="Scripts/floorStatic.js"></script>
+  <script type="text/javascript" src="Scripts/floorRuinable.js"></script>
+  <script type="text/javascript" src="Scripts/floorPeriodic.js"></script>
+  <script type="text/javascript" src="Scripts/lift.js"></script>
+  <script type="text/javascript" src="Scripts/player.js"></script>
+  <script type="text/javascript" src="Scripts/levelData.js"></script>
+  <script type="text/javascript" src="Scripts/level.js"></script>
+  <script type="text/javascript" src="Scripts/menu.js"></script>
+  <script type="text/javascript" src="Scripts/scoresMenu.js"></script>
+  <script type="text/javascript" src="Scripts/inGame.js"></script>
+  <script type="text/javascript" src="Scripts/main.js"></script>
 
 </body>
+
 </html>

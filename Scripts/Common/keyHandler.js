@@ -4,15 +4,19 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-  keystates[e.which] = true;
+  processKeyDown(e.which);
+}
 
-  if (e.which === KEY_RETURN) {
+function processKeyDown(keyCode) {
+  keystates[keyCode] = true;
+
+  if ((keyCode === KEY_RETURN || keyCode === KEY_SPACE || keyCode === KEY_LSHIFT) && scene.select) {
     scene.select();
-  } else if (e.which === KEY_UP) {
+  } else if (keyCode === KEY_UP && scene.selectPrev) {
     scene.selectPrev();
-  } else if (e.which === KEY_DOWN) {
+  } else if (keyCode === KEY_DOWN && scene.selectNext) {
     scene.selectNext();
-  } else if (e.which === KEY_ESCAPE) {
+  } else if (keyCode === KEY_ESCAPE && scene.back) {
     scene.back();
   }
 }

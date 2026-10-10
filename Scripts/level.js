@@ -201,7 +201,7 @@ function Level() {
         this.levelData = levelData[level]();
         this.bigChicken.isActive = this.levelData.isBigChickenActive;
         this.bigChicken.reset();
-        var difficult = inGameScene.difficult === "Easy" ? 'e' : 'h';
+        var difficult = inGameScene.difficult === EASY ? 'e' : 'h';
         for (var i = 0; i < this.levelData.chickens.length; i++) {
             if (this.levelData.chickens[i].diffFilter !== 'a' && difficult !== this.levelData.chickens[i].diffFilter) {
                 continue;

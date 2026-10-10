@@ -3,13 +3,12 @@ function ScoresMenu() {
     this.game_over = new Image();
     this.high_scene = new Image();
     this.win_graph = new Image();
-    this.focus = new Image();
+
     this.popPupPanel = new Image();
     this.inputBox = new Image();
     this.game_over.src = "GFX/GameOver.png";
     this.high_scene.src = "GFX/HighScores.png";
     this.win_graph.src = "GFX/WinScreen.png";
-    this.focus.src = "GFX/Focus.png";
     this.popPupPanel.src = "GFX/PopUpPanel.png";
     this.inputBox.src = "GFX/InputBox.png";
     this.highScores = [];
@@ -19,16 +18,28 @@ function ScoresMenu() {
     this.currentPos = 0;
 
     this.subScene = 0;
-    this.selected = 0;
+    this.selected = -1;
     this.gameOverTimeOut = new TimeoutEvent(40, switchToScoresSubMenu);
 
+    this.menupoints = [
+        { x: 86, y: 112, select: function(x) { screenChange.change(function() { scene = menuScene; }); } },
+        { x: 86, y: 199, select: function(x) {
+            screenChange.change(function() {
+                scene = inGameScene;
+                    inGameScene.newGame();
+                });
+            }
+        },
+        { x: 86, y: 286, select: function(x) { screenChange.change(function() { window.close(); }); } },
+        { x: 86, y: 409, select: function(x) { x.subScene = 4; } }
+    ];
     this.mouseCoord = { x: canvas.width / 2, y: canvas.height / 2 }
 
     this.handleEvents = function() {
         switch(this.subScene) {
             case 0:
                 if (keystates[KEY_ESCAPE]) {
-                    quit = true;
+                    screenChange.change(function() { window.close(); });
                 }
                 break;
             case 1:
@@ -69,14 +80,8 @@ function ScoresMenu() {
                     drawText(580, 90 + (i*20), i === this.currentPos ? gold : white, 15, this.highScores[i].Score, "right");
                 }
 
-                if (this.selected === 0) {
-                    ctx.drawImage(this.focus, 86, 112);
-                } else if (this.selected === 1) {
-                    ctx.drawImage(this.focus, 86, 199);
-                } else if (this.selected === 2) {
-                    ctx.drawImage(this.focus, 86, 286);
-                } else if (this.selected === 3) {
-                    ctx.drawImage(this.focus, 86, 409);
+                if (this.selected >= 0) {
+                    ctx.drawImage(focus, this.menupoints[this.selected].x, this.menupoints[this.selected].y);
                 }
                 break;
             case 1:
@@ -160,26 +165,30 @@ function ScoresMenu() {
     }
 
     this.mouseMove = function(e) {
-        this.mouseCoord.x = (e.clientX - canvas.offsetLeft) / scaleX;
-        this.mouseCoord.y = (e.clientY - canvas.offsetTop) / scaleY;
+        var canvasCoord = getCanvasCoordinates(e);
+        this.mouseCoord.x = canvasCoord.x;
+        this.mouseCoord.y = canvasCoord.y;
+        this.selected = -1;
 
-        if (this.mouseCoord.y > 112 && this.mouseCoord.y < 136) {
-            this.selected = 0;
-        } else if (this.mouseCoord.y > 199 && this.mouseCoord.y < 223) {
-            this.selected = 1
-        } else if (this.mouseCoord.y > 285 && this.mouseCoord.y < 310) {
-            this.selected = 2;
-        } else if (this.mouseCoord.y > 409 && this.mouseCoord.y < 434) {
-            this.selected = 3;
-        } else {
-            this.selected = -1;
+        if (this.subScene !== 0) {
+            return;
+        }
+
+        for (var i = 0; i < this.menupoints.length; i++) {
+            if (this.mouseCoord.x > this.menupoints[i].x && this.mouseCoord.x < this.menupoints[i].x + 200 && this.mouseCoord.y > this.menupoints[i].y && this.mouseCoord.y < this.menupoints[i].y + 40) {
+                this.selected = i;
+                break;
+            }
+            if (i === this.menupoints.length - 1) {
+                this.selected = -1;
+            }
         }
     }
     
     this.selectPrev = function() {
         this.selected--;
         if (this.selected < 0) {
-            this.selectPrev = 3;
+            this.selected = 3;
         }
     }
 
@@ -191,24 +200,8 @@ function ScoresMenu() {
     }
 
     this.select = function() {
-        if (this.subScene === 0) {
-            switch (this.selected) {
-                case 0:
-                    screenChange.change(function() { scene = menuScene; });
-                    break;
-                case 1:
-                    screenChange.change(function() {
-                        scene = inGameScene;
-                        inGameScene.newGame();
-                    });
-                    break;
-                case 2:
-                    quit = true;
-                    break;
-                case 3:
-                    this.subScene = 4;
-                    break;
-            }
+        if (this.selected >= 0 && this.selected < this.menupoints.length) {
+            this.menupoints[this.selected].select(this);
         }
     }
 }

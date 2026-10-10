@@ -13,17 +13,27 @@ scoreScene.load();
 canvas.width = 640;
 canvas.height = 480;
 
-var scaleX;
-var scaleY;
+var focus = new Image();
+focus.src = "GFX/Focus.png";
 
 function sizeCanvas() {
-    scaleX = (innerWidth - canvas.offsetLeft) / canvas.width;
-    scaleY = (innerHeight - canvas.offsetTop) / canvas.height;
+    var scaleToFit = Math.min(innerWidth / canvas.width, innerHeight / canvas.height);
 
-    var scaleToFit = Math.min(scaleX, scaleY);
+    canvas.style.position = "fixed";
+    canvas.style.left = "50%";
+    canvas.style.top = "50%";
+    canvas.style.width = (canvas.width * scaleToFit).toString() + "px";
+    canvas.style.height = (canvas.height * scaleToFit).toString() + "px";
+    canvas.style.transform = "translate(-50%, -50%)";
+}
 
-    myCanvas.style.transformOrigin = "50% 0 0"; //scale from top left
-    myCanvas.style.transform = "translateX(" + (innerWidth / 2 - canvas.width / 2).toString() + "px) scale("+ scaleToFit.toString() + ")";
+function getCanvasCoordinates(e) {
+    var canvasBounds = canvas.getBoundingClientRect();
+
+    return {
+        x: (e.clientX - canvasBounds.left) * canvas.width / canvasBounds.width,
+        y: (e.clientY - canvasBounds.top) * canvas.height / canvasBounds.height
+    };
 }
 
 sizeCanvas();
@@ -47,28 +57,26 @@ window.requestAnimationFrame = function() {
 		}
 }();
 
-function goFullScreen() {
-    if (canvas.requestFullscreen) {
-        canvas.requestFullscreen();
-    } else if (canvas.webkitRequestFullscreen) { /* Safari */
-        canvas.webkitRequestFullscreen();
-    } else if (canvas.msRequestFullscreen) { /* IE11 */
-        canvas.msRequestFullscreen();
-    }
-};
-
 document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 document.addEventListener("click", clickHandler, false);
 
 function mouseMoveHandler(e) {
-    if (scene === scoreScene) {
+    if (e.target && e.target.closest && e.target.closest(".touch-button")) {
+        return;
+    }
+
+    if (scene.mouseMove) {
         scene.mouseMove(e);
     }
 }
 
 function clickHandler(e) {
-    if (scene === scoreScene) {
+    if (e.target && e.target.closest && e.target.closest(".touch-button")) {
+        return;
+    }
+    if (scene.mouseClick) {
         scene.mouseClick(e);
     }
 }
