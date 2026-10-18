@@ -20,7 +20,7 @@ function InGame() {
     this.start = false;
     this.completed = false;
     this.showCompPanel = false;
-    this.completedTimeOut = new TimeoutEvent(120, function() { inGameScene.showCompPanel = true; });
+    this.completedTimeOut = new TimeoutEvent(120, function() { inGameScene.completed = true; inGameScene.showCompPanel = true; });
 
     this.currentLevel = 0;
     this.level = new Level();
@@ -29,7 +29,7 @@ function InGame() {
     this.difficult = EASY;
 
     this.handleEvents = function() {
-        if (!this.completed) {
+        if (!this.completed && !this.completedTimeOut.isLaunched()) {
             if (!this.player.dead) {
                 if (keystates[KEY_LEFT] || keystates[KEY_RIGHT] || isActionPressed("left", false) || isActionPressed("right", false)) {
                     if (!this.start) {
@@ -101,7 +101,6 @@ function InGame() {
 
     this.levelComplete = function() {
         this.level_pass.play();
-        this.completed = true;
         this.completedTimeOut.launch();
     }
 }
