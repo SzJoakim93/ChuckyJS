@@ -1,8 +1,17 @@
+var isGamePadUsed = false;
+
 function gamepadButtonDownHandler() {
+    if (!isGamePadUsed && anyGamepadButtonPressed()) {
+        isGamePadUsed = true;
+    }
     if (scene.selectPrev && isActionPressed("up", true)) {
         scene.selectPrev();
     } else if (scene.selectNext && isActionPressed("down", true)) {
         scene.selectNext();
+    } else if (scene.selectLeft && isActionPressed("left", true)) {
+        scene.selectLeft();
+    } else if (scene.selectRight && isActionPressed("right", true)) {
+        scene.selectRight();
     } else if (scene.select && isActionPressed("a", true)) {
         scene.select();
     }

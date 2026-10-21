@@ -21,6 +21,8 @@ function ScoresMenu() {
     this.selected = -1;
     this.gameOverTimeOut = new TimeoutEvent(40, switchToScoresSubMenu);
 
+    this.virtualKeyboard = new VirtualKeyboard(0, 286, 64, 36);
+
     this.menupoints = [
         { x: 86, y: 112, select: function(x) { screenChange.change(function() { scene = menuScene; }); } },
         { x: 86, y: 199, select: function(x) {
@@ -44,9 +46,9 @@ function ScoresMenu() {
                 break;
             case 1:
                 if (keystates[KEY_RETURN]) {
-                    this.insert();
-                    this.subScene = 0;
+                    this.finishNameEntry();
                 }
+                this.updateInputMode();
                 break;
             case 2:
                 this.gameOverTimeOut.launch();
@@ -85,10 +87,11 @@ function ScoresMenu() {
                 }
                 break;
             case 1:
-                ctx.drawImage(this.popPupPanel, 148, 200);
-                ctx.drawImage(this.inputBox, 201, 261);
-                drawText(148 + 171, 240, gold, 15, "Add name of high score and press enter", "center");
-                drawText(205, 275, white, 15, this.currentName + "|", "left");
+                ctx.drawImage(this.popPupPanel, 148, 140);
+                ctx.drawImage(this.inputBox, 201, 201);
+                drawText(148 + 171, 180, gold, 15, "Add name of high score and press enter", "center");
+                drawText(205, 215, white, 15, this.currentName + "|", "left");
+                this.virtualKeyboard.draw();
                 break;
             case 2:
                 ctx.drawImage(this.game_over, 0, 0);
@@ -161,7 +164,18 @@ function ScoresMenu() {
     }
 
     this.mouseClick = function(e) {
-        this.select();
+        this.updateInputMode();
+        if (!this.virtualKeyboard.visible) {
+            this.select();
+            return;
+        }
+
+        var rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+            var x = (e.clientX - rect.left) * canvas.width / rect.width;
+            var y = (e.clientY - rect.top) * canvas.height / rect.height;
+            this.virtualKeyboard.selectAt(x, y, this);
+        }
     }
 
     this.mouseMove = function(e) {
@@ -184,24 +198,86 @@ function ScoresMenu() {
             }
         }
     }
-    
+    this.finishNameEntry = function() {
+        if (this.subScene === 1) {
+            this.insert();
+            this.subScene = 0;
+        }
+    }
+
+    this.isEnteringName = function() {
+        return this.subScene === 1;
+    }
+
+    this.updateInputMode = function() {
+        this.virtualKeyboard.visible = this.isEnteringName() &&
+            (("ontouchstart" in window) || navigator.maxTouchPoints > 0 || isGamePadUsed);
+    }
+
     this.selectPrev = function() {
+        switch(this.subScene) {
+            case 0:
+                this.selectPrevMenu();
+                break;
+            case 1:
+                this.virtualKeyboard.move(0, -1);
+                break;
+        }
+    }
+
+    this.selectNext = function() {
+        switch(this.subScene) {
+            case 0:
+                this.selectNextMenu();
+                break;
+            case 1:
+                this.virtualKeyboard.move(0, 1);
+                break;
+        }
+    }
+
+    this.selectLeft = function() {
+        switch(this.subScene) {
+            case 1:
+                this.virtualKeyboard.move(-1, 0);
+                break;
+        }
+    }
+
+    this.selectRight = function() {
+        switch(this.subScene) {
+            case 1:
+                this.virtualKeyboard.move(1, 0);
+                break;
+        }
+    }
+
+    this.select = function() {
+        switch(this.subScene) {
+            case 0:
+                if (this.selected >= 0 && this.selected < this.menupoints.length) {
+                    this.menupoints[this.selected].select(this);
+                }
+                break;
+            case 1:
+                if (this.virtualKeyboard.visible) {
+                    this.virtualKeyboard.select(this);
+                }
+                break;
+        }
+    }
+
+    this.selectPrevMenu = function() {
         this.selected--;
         if (this.selected < 0) {
             this.selected = 3;
         }
     }
 
-    this.selectNext = function() {
+    this.selectNextMenu = function() {
         this.selected++;
         if (this.selected > 3) {
             this.selected = 0;
-        }
-    }
-
-    this.select = function() {
-        if (this.selected >= 0 && this.selected < this.menupoints.length) {
-            this.menupoints[this.selected].select(this);
         }
     }
 }
