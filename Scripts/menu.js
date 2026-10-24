@@ -8,8 +8,6 @@ function Menu() {
 
     this.subScene = 0;
 
-    this.mouseCoord = { x: canvas.width / 2, y: canvas.height / 2 }
-
     this.menupoints = [
             { x: 122, y: 238, select: function(x) { x.startGame(); } },
             { x: 122, y: 289, select: function(x) { x.showInfo(); } },
@@ -43,14 +41,11 @@ function Menu() {
         }
     }
 
-    this.mouseClick = function(e) {
+    this.mouseClick = function(x, y) {
         this.select();
     }
 
-    this.mouseMove = function(e) {
-        var canvasCoord = getCanvasCoordinates(e);
-        this.mouseCoord.x = canvasCoord.x;
-        this.mouseCoord.y = canvasCoord.y;
+    this.mouseMove = function(x, y) {
         this.selected = -1;
 
         if (this.subScene !== 0) {
@@ -58,8 +53,8 @@ function Menu() {
         }
 
         for (var i = 0; i < this.menupoints.length; i++) {
-            if (this.mouseCoord.x > this.menupoints[i].x && this.mouseCoord.x < this.menupoints[i].x + 75 &&
-                this.mouseCoord.y > this.menupoints[i].y && this.mouseCoord.y < this.menupoints[i].y + 25) {
+            if (x > this.menupoints[i].x && x < this.menupoints[i].x + 75 &&
+                y > this.menupoints[i].y && y < this.menupoints[i].y + 25) {
                 this.selected = i;
                 break;
             }

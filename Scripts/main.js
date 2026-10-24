@@ -7,6 +7,8 @@ var gold = "#E4C42C"
 var menuScene = new Menu();
 var scoreScene = new ScoresMenu();
 var inGameScene = new InGame();
+var virtualKeyboard = new VirtualKeyboard(0, 286, 64, 36);
+
 var scene = menuScene;
 scoreScene.load();
 
@@ -57,30 +59,6 @@ window.requestAnimationFrame = function() {
 		}
 }();
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
-document.addEventListener("click", clickHandler, false);
-
-function mouseMoveHandler(e) {
-    if (e.target && e.target.closest && e.target.closest(".touch-button")) {
-        return;
-    }
-
-    if (scene.mouseMove) {
-        scene.mouseMove(e);
-    }
-}
-
-function clickHandler(e) {
-    if (e.target && e.target.closest && e.target.closest(".touch-button")) {
-        return;
-    }
-    if (scene.mouseClick) {
-        scene.mouseClick(e);
-    }
-}
-
 var quit = false;
 
 function main() {
@@ -93,6 +71,7 @@ gameloop: {
         scene.handleEvents();
         gamepadButtonDownHandler();
         scene.rendering();
+        virtualKeyboard.draw();
     }
 }
 

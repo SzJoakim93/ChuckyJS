@@ -84,22 +84,22 @@ function VirtualKeyboard(x, y, keyWidth, keyHeight) {
         this.selectedCol = Math.max(0, Math.min(rowLength - 1, this.selectedCol + dx));
     };
 
-    this.select = function(scene) {
+    this.select = function() {
         var key = this.getKey();
 
-        if (key === "BACK") {
+        if (key === "BACK" && scene.inputChar) {
             scene.inputChar("Backspace");
-        } else if (key === "SPACE") {
+        } else if (key === "SPACE" && scene.inputChar) {
             scene.inputChar(" ");
-        } else if (key === "OK") {
+        } else if (key === "OK" && scene.finishInput) {
             this.visible = false;
-            scene.finishNameEntry();
-        } else {
+            scene.finishInput();
+        } else if (scene.inputChar) {
             scene.inputChar(key);
         }
     };
 
-    this.selectAt = function(x, y, scene) {
+    this.selectAt = function(x, y) {
         var row = Math.floor((y - this.y) / this.keyHeight);
         if (row < 0 || row >= KEY_LAYOUT.length || y >= this.y + (row + 1) * this.keyHeight - 4) {
             return false;
@@ -122,9 +122,14 @@ function VirtualKeyboard(x, y, keyWidth, keyHeight) {
 
         this.selectedRow = row;
         this.selectedCol = col;
-        this.select(scene);
+        this.select();
         return true;
     };
+
+    this.setVisibility = function(visible) {
+        this.visible = visible &&
+            (("ontouchstart" in window) || navigator.maxTouchPoints > 0 || isGamePadUsed);
+    }
 
     this.getOverrideWidth = function(row, col) {
         for (var i = 0; i < KEY_SIZE_OVERRIDES.length; i++) {

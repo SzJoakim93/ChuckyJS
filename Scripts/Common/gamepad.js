@@ -4,6 +4,22 @@ function gamepadButtonDownHandler() {
     if (!isGamePadUsed && anyGamepadButtonPressed()) {
         isGamePadUsed = true;
     }
+    if (virtualKeyboard.visible) {
+        if (isActionPressed("up", true)) {
+            virtualKeyboard.move(0, -1);
+        } else if (isActionPressed("down", true)) {
+            virtualKeyboard.move(0, 1);
+        } else if (isActionPressed("left", true)) {
+            virtualKeyboard.move(-1, 0);
+        } else if (isActionPressed("right", true)) {
+            virtualKeyboard.move(1, 0);
+        } else if (isActionPressed("a", true)) {
+            virtualKeyboard.select(scene);
+        }
+
+        return;
+    }
+
     if (scene.selectPrev && isActionPressed("up", true)) {
         scene.selectPrev();
     } else if (scene.selectNext && isActionPressed("down", true)) {

@@ -4,30 +4,47 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-  if (scene.isEnteringName && scene.isEnteringName()) {
-    if (e.key === "Backspace") {
+  if (scene.IsInputActive && scene.IsInputActive()) {
+    if (e.which === KEY_BACKSPACE) {
       e.preventDefault();
-      scene.inputChar("Backspace");
+      scene.InputChar("Backspace");
       return;
-    } else if (e.key === " ") {
+    } else if (e.which === KEY_SPACE) {
       e.preventDefault();
-      scene.inputChar(" ");
+      scene.InputChar(" ");
       return;
     } else if (e.key && e.key.length === 1 && /^[a-z]$/i.test(e.key)) {
       e.preventDefault();
-      scene.inputChar(e.key.toUpperCase());
+      scene.InputChar(e.key.toUpperCase());
       return;
-    } else if (e.key === "Enter") {
+    } else if (e.which === KEY_RETURN) {
       e.preventDefault();
-      scene.finishNameEntry();
+      scene.FinishInput();
       return;
     }
   }
+
   processKeyDown(e.which);
 }
 
 function processKeyDown(keyCode) {
   keystates[keyCode] = true;
+
+  if (virtualKeyboard.visible) {
+    if (keyCode === KEY_UP) {
+      virtualKeyboard.move(0, -1);
+    } else if (keyCode === KEY_DOWN) {
+      virtualKeyboard.move(0, 1);
+    } else if (keyCode === KEY_LEFT) {
+      virtualKeyboard.move(-1, 0);
+    } else if (keyCode === KEY_RIGHT) {
+      virtualKeyboard.move(1, 0);
+    } else if (keyCode === KEY_LSHIFT) {
+      virtualKeyboard.select();
+    }
+
+    return;
+  }
 
   if ((keyCode === KEY_RETURN || keyCode === KEY_SPACE || keyCode === KEY_LSHIFT) && scene.select) {
     scene.select();
